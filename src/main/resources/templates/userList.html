@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>User Control System</title>
+    <link rel="stylesheet" th:href="@{/stylesheet/common.css}"/>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="settings-bar">
+    <div class="into-settings-bar">
+        <img id="logo" th:src="@{/images/logo.jpg}" alt="Logo">
+        <div class="container-settings-bar-right">
+            <ul class="settings-bar-right">
+                <li class="dropdown" th:if="${currentUser}">
+                    <a href="#" role="button">
+                        <i id="person" class="prefix-icon material-icons">person</i>
+                        <span th:text="${currentUser.username}">Username</span>
+                        <i class="postfix-icon material-icons">expand_more</i>
+                    </a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li>
+                            <form method="POST" th:action="@{/logout}" id="logoutForm">
+                                <button type="submit" id="logout-button"
+                                        class="btn light-gray-btn">Logout
+                                </button>
+                            </form>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#" role="button">
+                        <i id="language" class="prefix-icon material-icons">public</i>
+                        English
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="nav-bar">
+    <div class="into-nav-bar">
+        <!-- START BAR -->
+        <div class="container-nav-bar-left">
+            <ul class="nav-bar-left">
+                <li class="dropdown">
+                    <a th:href="@{/user}">
+                        <i id="people" class="prefix-icon material-icons">people</i>
+                        Users
+                    </a>
+                </li>
+                <li class="dropdown" th:if="${currentUser} ? ${currentUser.role.toString() == 'ADMIN'} : false">
+                    <a th:href="@{/user/new}">
+                        <i id="add" class="prefix-icon material-icons">add</i>
+                        Create
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <!-- END BAR -->
+        <div id="page-label">user list</div>
+    </div>
+</div>
+
+<!-- CONTENT -->
+<div class="content gray-back user-page">
+    <div class="page-wrapper gray-back">
+
+        <div class="page-row" id="employee-row-1">
+
+            <!-- USERS -->
+            <div class="elements-set list-set" id="user-list-area">
+                <div class="profile-info-block">
+                    <div class="profile-info-header-wrap">
+                        <span class="profile-info-header">User Accounts
+                            <span class="count" th:text="${#lists.size(userList)}">Size</span>
+                        </span>
+                    </div>
+                    <div class="scr-wrap">
+                        <table class="profile-info-users">
+                            <tr th:each="user, rowStat : ${userList}">
+                                <td class="transition">
+                                    <a th:href="@{/user/{id}(id=${user.id})}" title="Go to user page">
+                                        <span th:if="${user.status}" class="fl-r status-on" >ACTIVE</span>
+                                        <span th:unless="${user.status}" class="fl-r status-off" >INACTIVE</span>
+                                        <span class="user-list user-num"  th:text="${rowStat.count}">Number</span>
+                                        <span class="user-list user-name" th:text="${user.username}">Username</span>
+                                        <span class="user-list user-role" th:text="${user.role}">ROLE</span>
+                                    </a>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+    <div class="into-footer">
+        <div class="copyright">
+            © 2021 Yauheni Ralavets
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

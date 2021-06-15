@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>User Control System</title>
+    <link rel="stylesheet" th:href="@{/stylesheet/common.css}"/>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="settings-bar">
+    <div class="into-settings-bar">
+        <img id="logo" th:src="@{/images/logo.jpg}" alt="Logo">
+        <div class="container-settings-bar-right">
+            <ul class="settings-bar-right">
+                <li class="dropdown">
+                    <a href="#" role="button">
+                        <i id="language" class="prefix-icon material-icons">public</i>
+                        English
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="nav-bar">
+    <div class="into-nav-bar">
+        <!-- START BAR -->
+        <div class="container-nav-bar-left">
+            <ul class="nav-bar-left">
+                <li class="dropdown">
+                    <a th:href="@{/user}">
+                        <i id="people" class="prefix-icon material-icons">people</i>
+                        Users
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <!-- END BAR -->
+        <div id="page-label">error page</div>
+    </div>
+</div>
+
+<!-- CONTENT -->
+<div class="content" id="error">
+    <div class="page-wrapper">
+
+        <div class="page-row" id="login-page-row">
+            <div class="elements-set" id="error-area">
+
+                <div class="alert alert-danger" style="text-align: left">
+                    <div class="main-msg">Operation failed</div>
+                    <br/>
+                    <div class="msg" th:text="${timestamp}">Time</div>
+                    <div class="msg" th:text="${'Type: ' + error}">Type</div>
+                    <div class="msg" th:text="${'Status: ' + status}">Status</div>
+                    <div class="msg" th:text="${'Message: ' + message}">Message</div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+    <div class="into-footer">
+        <div class="copyright">
+            © 2021 Yauheni Ralavets
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

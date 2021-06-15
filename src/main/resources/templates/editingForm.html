@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>User Control System</title>
+    <link rel="stylesheet" th:href="@{/stylesheet/common.css}"/>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
+    <script th:src="@{/js/change-password.js}"></script>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="settings-bar">
+    <div class="into-settings-bar">
+        <img id="logo" th:src="@{/images/logo.jpg}" alt="Logo">
+        <div class="container-settings-bar-right">
+            <ul class="settings-bar-right">
+                <li class="dropdown" th:if="${currentUser}">
+                    <a href="#" role="button">
+                        <i id="person" class="prefix-icon material-icons">person</i>
+                        <span th:text="${currentUser.username}">Username</span>
+                        <i class="postfix-icon material-icons">expand_more</i>
+                    </a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li>
+                            <form method="POST" th:action="@{/logout}" id="logoutForm">
+                                <button type="submit" id="logout-button"
+                                        class="btn light-gray-btn">Logout
+                                </button>
+                            </form>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#" role="button">
+                        <i id="language" class="prefix-icon material-icons">public</i>
+                        English
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="nav-bar">
+    <div class="into-nav-bar">
+        <!-- START BAR -->
+        <div class="container-nav-bar-left">
+            <ul class="nav-bar-left">
+                <li class="dropdown">
+                    <a th:href="@{/user}">
+                        <i id="people" class="prefix-icon material-icons">people</i>
+                        Users
+                    </a>
+                </li>
+                <li class="dropdown">
+                    <a th:href="@{/user/new}">
+                        <i id="add" class="prefix-icon material-icons">add</i>
+                        Create
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <!-- END BAR -->
+        <div id="page-label">user editing</div>
+    </div>
+</div>
+
+<!-- CONTENT -->
+<div class="content">
+    <div class="page-wrapper">
+
+        <div class="page-row" id="editing-row">
+            <div class="elements-set" id="user-editing-area">
+
+                <!--INPUT-->
+                <form th:action="@{/user/{id}/edit(id=${userDTO.id})}" method="post" th:object="${userDTO}">
+
+                    <input type="hidden" th:field="*{username}"/>
+
+                    <!-- ALERT -->
+                    <div class="edit-row clear-fix" th:if="${#fields.hasErrors()}">
+                        <div class="alert alert-danger">
+                            <div class="main-msg">Changes not saved.</div>
+                            <div class="msg">Please correct the problems below and resubmit.</div>
+                        </div>
+                    </div>
+
+                    <div class="edit-row clear-fix">
+                        <div class="edit-label">Username:</div>
+                        <div class="edit-labeled user-data" th:text="*{username}"></div>
+                    </div>
+
+
+                    <div th:if="${#request.getParameter('change')}">
+                        <div class="edit-row clear-fix" style="padding-bottom: 10px">
+                            <div class="edit-controls clear-fix">
+                                <span class="validationError" th:if="${#fields.hasErrors('password')}"
+                                      th:errors="*{password}">Password Error</span>
+                            </div>
+                            <div class="edit-controls clear-fix">
+                                <input type="checkbox" id="change-pas" name="change" value="check" checked/>
+                                <label class="save-label" for="change-pas">Change password</label>
+                            </div>
+                        </div>
+                        <div class="edit-row clear-fix">
+                            <div class="edit-label">Password:</div>
+                            <div class="edit-labeled">
+                                <input type="password" id="password" th:field="*{password}" class="dark" required
+                                       title="Only latin symbols and digits (3-16). Each at least 1 time"
+                                       autocomplete="off"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div th:unless="${#request.getParameter('change')}">
+                        <div class="edit-row clear-fix" style="padding-bottom: 10px">
+                            <div class="edit-controls clear-fix">
+                                <input type="checkbox" id="change-pas" name="change" value="check"/>
+                                <label class="save-label" for="change-pas">Change password</label>
+                            </div>
+
+                        </div>
+                        <div class="edit-row clear-fix">
+                            <div class="edit-label">Password:</div>
+                            <div class="edit-labeled">
+                                <input type="password" id="password" th:field="*{password}" class="dark" disabled
+                                       required
+                                       title="Only latin symbols and digits (3-16). Each at least 1 time"
+                                       autocomplete="off"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="edit-row clear-fix">
+                        <div class="edit-controls clear-fix">
+                            <span class="validationError"
+                                  th:if="${#fields.hasErrors('firstName')}"
+                                  th:errors="*{firstName}">First Name Error</span>
+                        </div>
+                        <div class="edit-label">First Name:</div>
+                        <div class="edit-labeled">
+                            <input type="text" id="first-name" th:field="*{firstName}" class="dark" required
+                                   placeholder="Enter <First Name>" title="Only latin symbols (1-16)"
+                                   autocomplete="off"/>
+                        </div>
+                    </div>
+
+                    <div class="edit-row clear-fix">
+                        <div class="edit-controls clear-fix">
+                            <span class="validationError"
+                                  th:if="${#fields.hasErrors('lastName')}"
+                                  th:errors="*{lastName}">Last Name Error</span>
+                        </div>
+                        <div class="edit-label">Last Name:</div>
+                        <div class="edit-labeled">
+                            <input type="text" id="last-name" th:field="*{lastName}" class="dark" required
+                                   placeholder="Enter <First Name>" title="Only latin symbols (1-16)"
+                                   autocomplete="off"/>
+                        </div>
+                    </div>
+
+                    <div class="edit-row clear-fix">
+                        <div class="edit-label">Role:</div>
+                        <div class="edit-labeled">
+                            <select id="role" th:field="*{role}" class="dark">
+                                <option th:value="USER" th:text="USER"></option>
+                                <option th:value="ADMIN" th:text="ADMIN"></option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="edit-row clear-fix">
+                        <div class="edit-label">Status:</div>
+                        <div class="edit-labeled">
+                            <select id="status" th:field="*{status}" class="dark">
+                                <option th:value="true" th:text="ACTIVE"></option>
+                                <option th:value="false" th:text="INACTIVE"></option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="edit-separator"></div>
+                    <div class="edit-controls clear-fix">
+                        <button type="submit" id="edit-button" class="btn red-btn">Save</button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+    <div class="into-footer">
+        <div class="copyright">
+            © 2021 Yauheni Ralavets
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>User Control System</title>
+    <link rel="stylesheet" th:href="@{/stylesheet/common.css}"/>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="settings-bar">
+    <div class="into-settings-bar">
+        <img id="logo" th:src="@{/images/logo.jpg}" alt="Logo">
+        <div class="container-settings-bar-right">
+            <ul class="settings-bar-right">
+                <li class="dropdown" th:if="${currentUser}">
+                    <a href="#" role="button">
+                        <i id="person" class="prefix-icon material-icons">person</i>
+                        <span th:text="${currentUser.username}">Username</span>
+                        <i class="postfix-icon material-icons">expand_more</i>
+                    </a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li>
+                            <form method="POST" th:action="@{/logout}" id="logoutForm">
+                                <button type="submit" id="logout-button"
+                                        class="btn light-gray-btn">Logout</button>
+                            </form>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#" role="button">
+                        <i id="language" class="prefix-icon material-icons">public</i>
+                        English
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="nav-bar">
+    <div class="into-nav-bar">
+        <!-- START BAR -->
+        <div class="container-nav-bar-left">
+            <ul class="nav-bar-left">
+                <li class="dropdown">
+                    <a th:href="@{/user}">
+                        <i id="people" class="prefix-icon material-icons">people</i>
+                        Users
+                    </a>
+                </li>
+                <li class="dropdown">
+                    <a th:href="@{/user/new}">
+                        <i id="add" class="prefix-icon material-icons">add</i>
+                        Create
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <!-- END BAR -->
+        <div id="page-label">user creation</div>
+    </div>
+</div>
+
+<!-- CONTENT -->
+<div class="content">
+    <div class="page-wrapper">
+
+        <div class="page-row" id="creating-row">
+            <div class="elements-set" id="user-creating-area">
+
+                <!--INPUT-->
+                <form th:action="@{/user/new}" method="post" th:object="${userDTO}">
+
+                    <!-- ALERT -->
+                    <div class="create-row clear-fix" th:if="${#fields.hasErrors() or usernameFail != null }">
+                        <div class="alert alert-danger">
+                            <div class="main-msg">User has not been created.</div>
+                            <div class="msg">Please correct the problems below and resubmit.</div>
+                        </div>
+                    </div>
+
+                    <div class="create-row clear-fix">
+                        <div class="create-controls clear-fix">
+                            <span class="validationError"
+                                  th:if="${#fields.hasErrors('username')}"
+                                  th:errors="*{username}">Username Error</span>
+                            <span class="validationError"
+                                  th:if="${usernameFail != null }" th:text="${usernameFail}">Username Fail</span>
+                        </div>
+                        <div class="create-label">Username:</div>
+                        <div class="create-labeled">
+                            <input type="text" id="username" th:field="*{username}" class="dark" required
+                                   placeholder="Enter <Username>" title="Only latin symbols (3-16)"
+                                   autocomplete="off"/>
+                        </div>
+                    </div>
+
+                    <div class="create-row clear-fix">
+                        <div class="create-controls clear-fix">
+                            <span class="validationError"
+                                  th:if="${#fields.hasErrors('password')}"
+                                  th:errors="*{password}">Password Error</span>
+                        </div>
+                        <div class="create-label">Password:</div>
+                        <div class="create-labeled">
+                            <input type="password" id="password" th:field="*{password}" class="dark" required
+                                   placeholder="Enter <Password>"
+                                   title="Only latin symbols and digits (3-16). Each at least 1 time"
+                                   autocomplete="off"/>
+                        </div>
+                    </div>
+
+                    <div class="create-row clear-fix">
+                        <div class="create-controls clear-fix">
+                            <span class="validationError"
+                                  th:if="${#fields.hasErrors('firstName')}"
+                                  th:errors="*{firstName}">First Name Error</span>
+                        </div>
+                        <div class="create-label">First Name:</div>
+                        <div class="create-labeled">
+                            <input type="text" id="first-name" th:field="*{firstName}" class="dark" required
+                                   placeholder="Enter <First Name>" title="Only latin symbols (1-16)"
+                                   autocomplete="off"/>
+                        </div>
+                    </div>
+
+                    <div class="create-row clear-fix">
+                        <div class="create-controls clear-fix">
+                            <span class="validationError"
+                                  th:if="${#fields.hasErrors('lastName')}"
+                                  th:errors="*{lastName}">Last Name Error</span>
+                        </div>
+                        <div class="create-label">Last Name:</div>
+                        <div class="create-labeled">
+                            <input type="text" id="last-name" th:field="*{lastName}" class="dark" required
+                                   placeholder="Enter <First Name>" title="Only latin symbols (1-16)"
+                                   autocomplete="off"/>
+                        </div>
+                    </div>
+
+                    <div class="create-row clear-fix">
+                        <div class="create-label">Role:</div>
+                        <div class="create-labeled">
+                            <select id="role" th:field="*{role}" class="dark">
+                                <option th:value="USER" th:text="USER"></option>
+                                <option th:value="ADMIN" th:text="ADMIN"></option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="create-row clear-fix">
+                        <div class="create-label">Status:</div>
+                        <div class="create-labeled">
+                            <select id="status" th:field="*{status}" class="dark">
+                                <option th:value="true" th:text="ACTIVE"></option>
+                                <option th:value="false" th:text="INACTIVE"></option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="create-separator"></div>
+                    <div class="create-controls clear-fix">
+                        <button type="submit" id="create-button" class="btn red-btn">Create</button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+    <div class="into-footer">
+        <div class="copyright">
+            © 2021 Yauheni Ralavets
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
